@@ -17,15 +17,9 @@
         android:theme="@style/Theme.Volicity"
         android:usesCleartextTraffic="true"
         tools:targetApi="3">
+
         <activity
-            android:name=".MusicPlayer"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".HomeActivity"
+            android:name=".LoginPage"
             android:exported="true"
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
@@ -38,6 +32,43 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name=".RegisterPage"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".SplashScreen"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".HomePage"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value=""/>
+        </activity>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name=".MusicPlayer"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
     </application>
 
 </manifest>

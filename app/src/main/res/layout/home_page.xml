@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#2D2E37"
+    tools:context=".HomePage">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/option"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/poppinsbold"
+        android:textSize="24dp"
+        android:text="Trending right now"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTopMusic"
+        android:layout_width="match_parent"
+        android:layout_height="146dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp">
+
+        <TextView
+            android:id="@+id/tvAllFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:textSize="16dp"
+            android:text="All"/>
+
+        <TextView
+            android:id="@+id/tvJPopFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/tvAllFilter"
+            android:fontFamily="@font/poppinsmedium"
+            android:textSize="16dp"
+            android:text="J-Pop" />
+
+        <TextView
+            android:id="@+id/tvJStreetFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/tvJPopFilter"
+            android:fontFamily="@font/poppinsmedium"
+            android:textSize="16dp"
+            android:text="J-Pop" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvListMusic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="25dp" />
+
+
+</LinearLayout>

@@ -15,6 +15,8 @@ public class MusicList implements Parcelable {
     String cover;
     String singer;
     String musicLink;
+    int id;
+    int viewCount;
 
     protected MusicList(Parcel in) {
         path = in.readString();
@@ -23,6 +25,8 @@ public class MusicList implements Parcelable {
         cover = in.readString();
         singer = in.readString();
         musicLink = in.readString();
+        viewCount = in.readInt();
+        id = in.readInt();
     }
 
     protected MusicList() {
@@ -103,5 +107,21 @@ public class MusicList implements Parcelable {
         dest.writeString(cover);
         dest.writeString(singer);
         dest.writeString(musicLink);
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

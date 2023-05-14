@@ -15,24 +15,25 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-public class RecycleAdaptor extends RecyclerView.Adapter<RecycleAdaptor.RecycleViewHolder> {
+public class RecycleAdaptorList extends RecyclerView.Adapter<RecycleAdaptorList.RecycleViewHolder> {
 
     private Context context;
     private List<MusicList> musicList;
     private ContactsAdapterListener listener;
 
     public class RecycleViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvTitleMusic;
+        public TextView tvMusicName, tvSingerName;
         public ImageView ivCoverMusic;
 
         public RecycleViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitleMusic = itemView.findViewById(R.id.tvTitleMusic);
+            tvMusicName = itemView.findViewById(R.id.tvMusicName);
+            tvSingerName = itemView.findViewById(R.id.tvSingerName);
             ivCoverMusic = itemView.findViewById(R.id.ivCoverMusic);
         }
     }
 
-    public RecycleAdaptor(Context context, List <MusicList> musicList, ContactsAdapterListener listener){
+    public RecycleAdaptorList(Context context, List <MusicList> musicList){
         this.context = context;
         this.musicList = musicList;
         this.listener = listener;
@@ -40,20 +41,21 @@ public class RecycleAdaptor extends RecyclerView.Adapter<RecycleAdaptor.RecycleV
 
     @NonNull
     @Override
-    public RecycleAdaptor.RecycleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.raw_my_music, parent, false);
-
+    public RecycleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.raw_my_music, parent, false);
         return new RecycleViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecycleAdaptor.RecycleViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecycleAdaptorList.RecycleViewHolder holder, int position) {
         final MusicList musicList = this.musicList.get(position);
-        holder.tvTitleMusic.setText(musicList.getTitle());
+
+        holder.tvMusicName.setText(musicList.getTitle());
+        holder.tvSingerName.setText(musicList.getSinger());
         Glide.with(holder.ivCoverMusic.getContext())
                 .load(musicList.getCover())
-                .apply(new RequestOptions().override(108,108))
+                .fitCenter()
+                .apply(new RequestOptions().override(192,146))
                 .into(holder.ivCoverMusic);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +64,7 @@ public class RecycleAdaptor extends RecyclerView.Adapter<RecycleAdaptor.RecycleV
                 listener.onContactSelected(musicList, position);
             }
         });
+
     }
 
     @Override
@@ -73,3 +76,4 @@ public class RecycleAdaptor extends RecyclerView.Adapter<RecycleAdaptor.RecycleV
         void onContactSelected(MusicList musicList, int position);
     }
 }
+
