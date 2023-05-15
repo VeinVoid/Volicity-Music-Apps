@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -55,6 +56,7 @@ public class HomePage extends AppCompatActivity {
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
+                        Log.d("TAG", "onResponse: " + jsonObject);
                         try {
                             JSONArray jsonMusicList = jsonObject.getJSONArray("data_music");
                             for (int i = 0; i < jsonMusicList.length(); i++) {
@@ -118,9 +120,6 @@ public class HomePage extends AppCompatActivity {
         adaptorList = new RecycleAdaptorList(getApplicationContext(), listMusic);
         rvListMusic.setLayoutManager(new LinearLayoutManager(HomePage.this, RecyclerView.VERTICAL, false));
         rvListMusic.setAdapter(adaptorList);
-
-        int margin = getResources().getDimensionPixelSize(R.dimen.last_item_margin);
-        rvListMusic.addItemDecoration(new LastItemMarginDecoration(margin));
     }
 
     public class LastItemMarginDecoration extends RecyclerView.ItemDecoration {
@@ -143,10 +142,5 @@ public class HomePage extends AppCompatActivity {
         }
     }
 
-    private void showPopupWindow(View anchorView) {
-        View popupView = getLayoutInflater().inflate(R.layout.popup_menu, null);
-        PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        popupWindow.showAsDropDown(anchorView);
-    }
 }
