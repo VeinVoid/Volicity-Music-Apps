@@ -93,29 +93,63 @@ public class RecycleAdaptorList extends RecyclerView.Adapter<RecycleAdaptorList.
                 LinearLayout llPlayMusic = dialog.findViewById(R.id.llPlayMusic);
                 LinearLayout llDelete = dialog.findViewById(R.id.llDelete);
 
+                llDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = holder.getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            deleteItem(position);
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                ImageView ivPopupCoverMusic = dialog.findViewById(R.id.ivCoverMusicPopup);
+
+                Glide.with(ivPopupCoverMusic.getContext())
+                        .load(musicList.getCover())
+                        .into(ivPopupCoverMusic);
+
                 dialog.show();
                 dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimation;
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
                 return false;
             }
         });
         holder.ivThreeDote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = LayoutInflater.from(context);
-                View popupView = inflater.inflate(R.layout.popup_menu, null);
+                final Dialog dialog = new Dialog(v.getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.popup_menu);
 
-                PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
-                popupWindow.setAnimationStyle(R.style.PopupAnimation);
+                LinearLayout llPlayMusic = dialog.findViewById(R.id.llPlayMusic);
+                LinearLayout llDelete = dialog.findViewById(R.id.llDelete);
 
-                ImageView ivPopupCoverMusic = popupView.findViewById(R.id.ivCoverMusicPopup);
+                llDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = holder.getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            deleteItem(position);
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+                ImageView ivPopupCoverMusic = dialog.findViewById(R.id.ivCoverMusicPopup);
 
                 Glide.with(ivPopupCoverMusic.getContext())
                         .load(musicList.getCover())
                         .into(ivPopupCoverMusic);
 
-                popupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                dialog.show();
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().getAttributes().windowAnimations = R.style.PopupAnimation;
+                dialog.getWindow().setGravity(Gravity.BOTTOM);
             }
         });
 
@@ -128,6 +162,11 @@ public class RecycleAdaptorList extends RecyclerView.Adapter<RecycleAdaptorList.
 
     public interface ContactsAdapterListener {
         void onContactSelected(MusicList contact);
+    }
+
+    public void deleteItem(int position) {
+        musicList.remove(position);
+        notifyItemRemoved(position);
     }
 }
 

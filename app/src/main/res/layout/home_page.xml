@@ -10,15 +10,33 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_marginTop="25dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp">
 
         <ImageView
+            android:id="@+id/ivOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/option"/>
+            android:src="@drawable/icon_option"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/ivOption"
+            app:cardCornerRadius="10dp"
+            app:cardBackgroundColor="#00000000">
+
+            <EditText
+                android:id="@+id/etSearchbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#26D9D9D9"
+                android:textColor="@color/white"/>
+
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 

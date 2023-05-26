@@ -3,12 +3,15 @@ package com.example.volicity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +24,7 @@ public class ProfilePage extends AppCompatActivity {
     ImageButton ibHome, ibSearch, ibAdd, ibProfile;
     TextView tvAccountUsername, tvAccountEmail;
     ImageView ivPhotoProfile;
+    LinearLayout llLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class ProfilePage extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         Navbar();
+        Menu();
     }
 
     @Override
@@ -68,5 +73,23 @@ public class ProfilePage extends AppCompatActivity {
         ibSearch = findViewById(R.id.ibSearch);
         ibAdd = findViewById(R.id.ibAdd);
         ibProfile = findViewById(R.id.ibprofile);
+    }
+
+    public void Menu(){
+
+        llLogout = findViewById(R.id.llLogout);
+        llLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+
+                Intent intent = new Intent(ProfilePage.this, LoginPage.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }

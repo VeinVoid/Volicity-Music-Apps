@@ -3,7 +3,10 @@ package com.example.volicity;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,8 +44,9 @@ public class LoginPage extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private CallbackManager callbackManager;
     private int RC_SIGN_IN = 214;
+    UserData userData = new UserData();
     TextView tvSignUp;
-    EditText etEmail, etPass;
+    EditText etUsername, etPass;
     Button btnLogin, btnGoogle, btnFacebook;
 
     @Override
@@ -50,12 +54,7 @@ public class LoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page);
 
-        ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null){
-            actionBar.hide();
-        }
-
+        CheckLoggedInUser();
         LoginLocalApps();
         LoginGoogle();
         LoginFacebook();
@@ -63,23 +62,21 @@ public class LoginPage extends AppCompatActivity {
     }
 
     private void LoginLocalApps() {
-        etEmail = findViewById(R.id.etEmail);
+        etUsername = findViewById(R.id.etUsername);
         etPass = findViewById(R.id.etPass);
         btnLogin = findViewById(R.id.btnLogin);
-        etEmail.setText("");
-        etEmail.setText("");
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String email = etEmail.getText().toString();
+                String username = etUsername.getText().toString();
                 String pass = etPass.getText().toString();
 
-                if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(pass)){
+                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(pass)){
 
                     AndroidNetworking.post("https://mediadwi.com/api/latihan/login")
-                            .addBodyParameter("username", email)
+                            .addBodyParameter("username", username)
                             .addBodyParameter("password", pass)
                             .setPriority(Priority.MEDIUM)
                             .build()
@@ -91,8 +88,14 @@ public class LoginPage extends AppCompatActivity {
                                         boolean status = respons.getBoolean("status");
 
                                         if (status){
+                                            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            editor.putString("username", username);
+                                            editor.apply();
+
                                             Intent intent = new Intent(LoginPage.this, SplashScreen.class);
-                                            intent.putExtra("username", email);
+                                            userData.setUsername(username);
+                                            EventBus.getDefault().postSticky(userData);
                                             startActivity(intent);
                                             finish();
                                         }
@@ -139,13 +142,18 @@ public class LoginPage extends AppCompatActivity {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
 
-            UserData userData = new UserData();
+            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("username", account.getDisplayName());
+            editor.putString("email", account.getEmail());
+            editor.putString("imageProfile", account.getPhotoUrl().toString());
+            editor.apply();
+
             userData.setUsername(account.getDisplayName());
             userData.setEmail(account.getEmail());
             userData.setImageProfile(account.getPhotoUrl());
 
             Intent intent = new Intent(this, SplashScreen.class);
-            intent.putExtra("userData", userData);
             EventBus.getDefault().postSticky(userData);
             startActivity(intent);
             finish();
@@ -201,5 +209,22 @@ public class LoginPage extends AppCompatActivity {
                 startActivity(signUpIntent);
             }
         });
+    }
+
+    private void CheckLoggedInUser() {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", null);
+        String email = sharedPreferences.getString("email", null);
+        Uri imageProfile = Uri.parse(sharedPreferences.getString("imageProfile", null));
+
+        if (username != null) {
+            Intent intent = new Intent(LoginPage.this, SplashScreen.class);
+            userData.setUsername(username);
+            userData.setEmail(email);
+            userData.setImageProfile(imageProfile);
+            EventBus.getDefault().postSticky(userData);
+            startActivity(intent);
+            finish();
+        }
     }
 }
