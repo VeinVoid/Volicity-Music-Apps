@@ -5,13 +5,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -27,9 +29,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class HomePage extends AppCompatActivity {
+public class HomePage extends AppCompatActivity implements RecycleAdaptorList.ContactsAdapterListener{
 
+    ProgressBar pbload;
+    TextView tvTopMusic;
     ImageView ivthreeDot;
+    ImageButton ibHome, ibSearch, ibAdd, ibProfile;
     RecyclerView rvTopMusic, rvListMusic;
     RecycleAdaptorTopList adaptorTopList;
     RecycleAdaptorList adaptorList;
@@ -42,13 +47,14 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_page);
 
-        getMusicAPITopMusic();
-        listMusic();
+        GetMusicAPI();
+        ListMusic();
+        Navbar();
 
     }
 
-    public void getMusicAPITopMusic() {
-
+    //Get Music API
+    public void GetMusicAPI() {
         AndroidNetworking.get("https://volicitymusicvectoryapi.000webhostapp.com/music?sort=name")
                 .addQueryParameter("sort","view")
                 .setPriority(Priority.HIGH)
@@ -66,13 +72,22 @@ public class HomePage extends AppCompatActivity {
                                 musicList.setTitle(jsonMusic.getString("name"));
                                 musicList.setSinger(jsonMusic.getString("singer"));
                                 musicList.setCover(jsonMusic.getString("cover"));
+                                musicList.setMusicLink(jsonMusic.getString("music"));
                                 musicList.setViewCount(jsonMusic.getInt("view"));
                                 listMusic.add(musicList);
                                 topListMusic.add(musicList);
                             }
 
-                            topListMusic();
-                            listMusic();
+                            tvTopMusic = findViewById(R.id.tvTopMusic);
+                            tvTopMusic.setVisibility(View.VISIBLE);
+                            View rvFilter = findViewById(R.id.rvFilter);
+                            rvFilter.setVisibility(View.VISIBLE);
+                            View cvNavbar = findViewById(R.id.cvNavbar);
+                            cvNavbar.setVisibility(View.VISIBLE);
+                            pbload = findViewById(R.id.pbload);
+                            pbload.setVisibility(View.GONE);
+                            TopListMusic();
+                            ListMusic();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -86,7 +101,8 @@ public class HomePage extends AppCompatActivity {
                 });
     }
 
-    public void topListMusic(){
+    //Filtering Top Music List API
+    public void TopListMusic(){
         Collections.sort(topListMusic, new Comparator<MusicList>() {
             @Override
             public int compare(MusicList music1, MusicList music2) {
@@ -105,8 +121,8 @@ public class HomePage extends AppCompatActivity {
         rvTopMusic.addItemDecoration(new LastItemMarginDecoration(margin));
     }
 
-    public void listMusic(){
-
+    //Filtering Music List API
+    public void ListMusic(){
         Collections.sort(listMusic, new Comparator<MusicList>() {
             @Override
             public int compare(MusicList music1, MusicList music2) {
@@ -117,11 +133,24 @@ public class HomePage extends AppCompatActivity {
         ivthreeDot = findViewById(R.id.ivthreeDot);
 
         rvListMusic = findViewById(R.id.rvListMusic);
-        adaptorList = new RecycleAdaptorList(getApplicationContext(), listMusic);
+        adaptorList = new RecycleAdaptorList(getApplicationContext(), listMusic, this);
         rvListMusic.setLayoutManager(new LinearLayoutManager(HomePage.this, RecyclerView.VERTICAL, false));
         rvListMusic.setAdapter(adaptorList);
+
+        int margin = 120;
+        rvListMusic.addItemDecoration(new LastItemMarginDecorationL(margin));
     }
 
+    //Adaptor Click Listener
+    @Override
+    public void onContactSelected(MusicList contact) {
+        Intent musicPlayer = new Intent(this, MusicPlayer.class);
+        musicPlayer.putExtra("onlineMusic", contact);
+        musicPlayer.putExtra("arrayMusic", listMusic);
+        startActivity(musicPlayer);
+    }
+
+    //Add Margin In Last Index Off Top Music List API
     public class LastItemMarginDecoration extends RecyclerView.ItemDecoration {
         private int margin;
 
@@ -142,5 +171,40 @@ public class HomePage extends AppCompatActivity {
         }
     }
 
+    //Add Margin In Last Index Off Music List API
+    public class LastItemMarginDecorationL extends RecyclerView.ItemDecoration {
+        private int margin;
 
+        public LastItemMarginDecorationL(int margin) {
+            this.margin = margin;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+
+            int position = parent.getChildAdapterPosition(view);
+            int itemCount = parent.getAdapter().getItemCount();
+
+            if (position == itemCount - 1) {
+                outRect.bottom = margin;
+            }
+        }
+    }
+
+    //NavBar
+    public void Navbar(){
+        ibHome = findViewById(R.id.ibHome);
+        ibSearch = findViewById(R.id.ibSearch);
+        ibAdd = findViewById(R.id.ibAdd);
+        ibProfile = findViewById(R.id.ibprofile);
+        ibProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePage.this, ProfilePage.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
 }

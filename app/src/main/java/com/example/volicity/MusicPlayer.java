@@ -33,9 +33,11 @@ public class MusicPlayer extends AppCompatActivity {
 
         //Get All Data From Home Activity
         Intent music = getIntent();
-        MusicList musicList = (MusicList) music.getParcelableExtra("myMusic");
+        MusicList musicList = (MusicList) music.getParcelableExtra("onlineMusic");
         ArrayList<MusicList> musicLists = getIntent().getParcelableArrayListExtra("musicList");
         int currentIndex = getIntent().getIntExtra("currentPosition", 0);
+
+        Log.d("TAG", "onCreate: " + musicList.musicLink);
 
         //Connect The Activity With XML
         ImageView ivmusicCover = findViewById(R.id.ivmusicCover);
@@ -54,7 +56,7 @@ public class MusicPlayer extends AppCompatActivity {
         tvSinger.setText(musicList.getSinger());
 
         //Get Audio URL
-        String audioUrl = musicList.getMusicLink();
+        String audioUrl = musicList.musicLink;
 
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

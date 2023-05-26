@@ -23,6 +23,7 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/tvTopMusic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -31,18 +32,28 @@
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/poppinsbold"
         android:textSize="24dp"
-        android:text="Trending right now"/>
+        android:text="Trending right now"
+        android:visibility="invisible"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTopMusic"
         android:layout_width="match_parent"
         android:layout_height="146dp"/>
 
+    <ProgressBar
+        android:id="@+id/pbload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center"/>
+
     <RelativeLayout
+        android:id="@+id/rvFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
-        android:layout_marginLeft="25dp">
+        android:layout_marginLeft="25dp"
+        android:visibility="invisible">
 
         <TextView
             android:id="@+id/tvAllFilter"
@@ -74,11 +85,70 @@
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvListMusic"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" />
+        android:layout_height="wrap_content">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvListMusic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvNavbar"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginBottom="16dp"
+            android:layout_alignBottom="@id/rvListMusic"
+            android:backgroundTint="#FA484848"
+            app:cardCornerRadius="10dp"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageButton
+                    android:id="@+id/ibHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="18dp"
+                    android:backgroundTint="#00000000"
+                    android:src="@drawable/icon_home" />
+
+                <ImageButton
+                    android:id="@+id/ibSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_toEndOf="@+id/ibHome"
+                    android:backgroundTint="#00000000"
+                    android:src="@drawable/icons_search" />
+
+                <ImageButton
+                    android:id="@+id/ibAdd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_toEndOf="@id/ibSearch"
+                    android:backgroundTint="#00000000"
+                    android:src="@drawable/icon_add"/>
+
+                <ImageButton
+                    android:id="@+id/ibprofile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="30dp"
+                    android:layout_toEndOf="@id/ibAdd"
+                    android:backgroundTint="#00000000"
+                    android:src="@drawable/icon_profile"/>
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
 
 </LinearLayout>

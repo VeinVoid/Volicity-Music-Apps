@@ -30,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,7 +91,10 @@ public class LoginPage extends AppCompatActivity {
                                         boolean status = respons.getBoolean("status");
 
                                         if (status){
-                                            Toast.makeText(LoginPage.this, "P", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(LoginPage.this, SplashScreen.class);
+                                            intent.putExtra("username", email);
+                                            startActivity(intent);
+                                            finish();
                                         }
                                         else{
                                             Toast.makeText(LoginPage.this, "Wrong Pass", Toast.LENGTH_SHORT).show();
@@ -115,7 +119,7 @@ public class LoginPage extends AppCompatActivity {
 
     private void LoginGoogle(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("221209691536-nv0tbam0a2j5fdr0o05pq612o7nrd7i8.apps.googleusercontent.com")
+                .requestIdToken("221209691536-r6751bem8avln0heh5cl8lq1p5gr4hqo.apps.googleusercontent.com")
                 .requestEmail()
                 .build();
 
@@ -134,11 +138,18 @@ public class LoginPage extends AppCompatActivity {
     private void handleGoogleSignInResult(Task<GoogleSignInAccount> task) {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
-            String nameAccount = account.getDisplayName();
+
+            UserData userData = new UserData();
+            userData.setUsername(account.getDisplayName());
+            userData.setEmail(account.getEmail());
+            userData.setImageProfile(account.getPhotoUrl());
+
             Intent intent = new Intent(this, SplashScreen.class);
-            intent.putExtra("nameAccount", nameAccount);
+            intent.putExtra("userData", userData);
+            EventBus.getDefault().postSticky(userData);
             startActivity(intent);
             finish();
+
         } catch (ApiException e) {
             e.printStackTrace();
         }
@@ -148,10 +159,8 @@ public class LoginPage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleGoogleSignInResult(task);
-        }
+        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+        handleGoogleSignInResult(task);
     }
 
     private void LoginFacebook(){
@@ -182,12 +191,6 @@ public class LoginPage extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        callbackManager.onActivityResult(requestCode, resultCode, data);
-//    }
 
     private void Register(){
         tvSignUp = findViewById(R.id.tvSignUp);

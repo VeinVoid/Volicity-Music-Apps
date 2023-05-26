@@ -20,14 +20,15 @@ public class SplashScreen extends AppCompatActivity {
         tvAccountUsername = findViewById(R.id.tvAccountUsername);
 
         Intent intent = getIntent();
-        String name = intent.getStringExtra("nameAccount");
-        tvAccountUsername.setText(name);
+        UserData userData = intent.getParcelableExtra("userData");
+        tvAccountUsername.setText(userData.Username);
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent homeScreen = new Intent(getApplicationContext(), HomePage.class);
                 startActivity(homeScreen);
+                finish();
             }
         }, 1000);
     }

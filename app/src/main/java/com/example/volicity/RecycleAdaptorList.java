@@ -1,11 +1,24 @@
 package com.example.volicity;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -40,7 +53,7 @@ public class RecycleAdaptorList extends RecyclerView.Adapter<RecycleAdaptorList.
         }
     }
 
-    public RecycleAdaptorList(Context context, List <MusicList> musicList){
+    public RecycleAdaptorList(Context context, List <MusicList> musicList, ContactsAdapterListener listener){
         this.context = context;
         this.musicList = musicList;
         this.listener = listener;
@@ -55,7 +68,7 @@ public class RecycleAdaptorList extends RecyclerView.Adapter<RecycleAdaptorList.
 
     @Override
     public void onBindViewHolder(@NonNull RecycleAdaptorList.RecycleViewHolder holder, int position) {
-        final MusicList musicList = this.musicList.get(position);
+        final MusicList musicList = this.musicList.get(holder.getAdapterPosition());
 
         holder.tvMusicName.setText(musicList.getTitle());
         holder.tvSingerName.setText(musicList.getSinger());
@@ -67,16 +80,42 @@ public class RecycleAdaptorList extends RecyclerView.Adapter<RecycleAdaptorList.
         holder.rlMyMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = holder.getAdapterPosition();
-                listener.onContactSelected(musicList, position);
+                listener.onContactSelected(musicList);
+            }
+        });
+        holder.rlMyMusic.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                final Dialog dialog = new Dialog(v.getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.popup_menu);
+
+                LinearLayout llPlayMusic = dialog.findViewById(R.id.llPlayMusic);
+                LinearLayout llDelete = dialog.findViewById(R.id.llDelete);
+
+                dialog.show();
+                dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                return false;
             }
         });
         holder.ivThreeDote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View popupMenu = inflater.inflate(R.layout.popup_menu, null);
+                LayoutInflater inflater = LayoutInflater.from(context);
+                View popupView = inflater.inflate(R.layout.popup_menu, null);
 
+                PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.setBackgroundDrawable(new ColorDrawable(Color.BLACK));
+                popupWindow.setAnimationStyle(R.style.PopupAnimation);
+
+                ImageView ivPopupCoverMusic = popupView.findViewById(R.id.ivCoverMusicPopup);
+
+                Glide.with(ivPopupCoverMusic.getContext())
+                        .load(musicList.getCover())
+                        .into(ivPopupCoverMusic);
+
+                popupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
             }
         });
 
@@ -88,7 +127,7 @@ public class RecycleAdaptorList extends RecyclerView.Adapter<RecycleAdaptorList.
     }
 
     public interface ContactsAdapterListener {
-        void onContactSelected(MusicList musicList, int position);
+        void onContactSelected(MusicList contact);
     }
 }
 

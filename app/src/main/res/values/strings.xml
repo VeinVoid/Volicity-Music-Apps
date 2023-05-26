@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Volicity</string>
-    <string name="default_web_client_id"></string>
     <string name="facebook_app_id">1321736298697482</string>
 </resources>

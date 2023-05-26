@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#2D2E37"
     android:orientation="vertical"
     tools:context=".MusicPlayer">
 
@@ -29,15 +29,8 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:fontFamily="@font/poppinssemibold"
-            android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:text="Now Playing"/>
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/threedotes"/>
 
     </RelativeLayout>
 
@@ -65,21 +58,19 @@
         android:id="@+id/tvMusicTittle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="30dp"
-        android:layout_marginLeft="25dp"
-        android:fontFamily="@font/poppinsmedium"
-        android:textColor="@color/black"
-        android:textSize="24dp"
-        android:text="Music Tittle"/>
+        android:fontFamily="@font/poppinssemibold"
+        android:text="Music Tittle"
+        android:textSize="24dp" />
 
     <TextView
         android:id="@+id/tvSinger"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="-10dp"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"
         android:fontFamily="@font/poppinsmedium"
-        android:textColor="#2E2E2E"
         android:textSize="16dp"
         android:text="Singer"/>
 
@@ -102,7 +93,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:textColor="@color/black"
             android:text="00:00"/>
 
         <TextView
@@ -111,7 +101,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
-            android:textColor="@color/black"
             android:text="00:00"/>
 
     </RelativeLayout>

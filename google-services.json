@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "221209691536",
+    "project_id": "volicity",
+    "storage_bucket": "volicity.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221209691536:android:d1f9b9f740dc59ae64df15",
+        "android_client_info": {
+          "package_name": "com.example.volicity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221209691536-f33qo76qovifb7cepebbtl2i4ie3phmc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.volicity",
+            "certificate_hash": "92b1734e4df97c8632d1461da2937a2028f80b38"
+          }
+        },
+        {
+          "client_id": "221209691536-m312u7rr4p119vhe6751914b66pscsnu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDR6gI7RIr_J6iGkc_v-4fD837irG11DCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "110995087473672425071",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
